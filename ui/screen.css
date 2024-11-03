@@ -1,0 +1,299 @@
+@charset "UTF-8";
+@import url(ui.datepicker.css);
+
+/* oldalfelépítés */
+html, body {
+	font: 11px "Lucida Grande", "Lucida Sans Unicode", Verdana, Helvetica, sans-serif;
+	background-color: rgb(204,204,255);
+	color: black;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+#pg {
+	margin: 0 auto;
+	width: 1000px;
+	background: rgb(255,255,204);
+	position: relative;
+	height: 0px;
+}
+#biblereg {
+	width: 450px;
+	position: absolute;
+	left: 20px;
+	top: 0;
+	background: white url(halld.png) no-repeat 118px 5px;
+	padding: 80px 10px 10px 10px;
+}
+
+/* kezelőfelület */
+#biblereg-buttons {
+	background: rgb(51,51,102);
+	padding: 2px 10px;
+	margin: 0 -10px;
+	height: 21px;
+}
+#biblereg-buttons button {
+	width: 220px;
+	font-size: 10px;
+}
+#biblereg ul#biblereg-form {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#biblereg ul#biblereg-form li {
+	margin: 0;
+	padding: 0;
+	min-height: 24px;
+}
+#biblereg ul#biblereg-form li:last-child {
+	display: none;
+}
+#biblereg  label {
+	width: 100px;
+	text-align: right;
+	float: left;
+	margin-top: 2px; 
+}
+#biblereg label + select, #biblereg  label + input[type=text]  {
+	width: 322px;
+	margin-left: 10px;
+}
+#biblereg  label + select {
+	width: 326px;
+}
+#biblereg input[type=checkbox]:first-child {
+	margin-left: 110px;
+}
+#biblereg input[type=radio]:first-child {
+	margin-left: 105px;
+}
+#biblereg input[type=checkbox]:first-child + label,
+#biblereg input[type=radio] + label {
+	width: auto;
+	text-align: left;
+	float: none;
+}
+button {
+	font: 11px "Lucida Grande", "Lucida Sans Unicode", Verdana, Helvetica, sans-serif;
+}
+
+/* eredmény  */
+ul#biblereg-result {
+	list-style: none;
+	margin: 1em 0;
+	padding: 0;
+}
+ul#biblereg-result li {
+	margin: 0;
+	padding: 0;
+}
+#biblereg-comment {
+	float: right; 
+	width: 252px; 
+	margin: 5px; 
+	border: 1px dotted black;
+	padding: 4px;
+	display: none;
+}
+#biblereg-comment span {
+	float: left;
+	width: 12px; 
+	height: 12px;
+}
+#biblereg-comment span.type-lower { background: rgb(0,132,209); }
+#biblereg-comment span.type-upper { background: rgb(255,149,14);  }
+
+
+/* szerkesztő */
+#biblereg-editor {
+	position: relative;
+	left: 0px;
+	top: 130px;
+	width: auto;
+	margin: 0;
+	background: white;
+	display: none;
+}
+#biblereg-editor div {
+	background: rgb(51,51,102);
+	padding: 2px 0px;
+	height: 21px;
+}
+#biblereg-editor ol {
+	list-style-position: inside;
+	clear: both;
+	-moz-column-width: 190px;
+	-moz-column-gap: 1em;
+	-webkit-column-width: 310px;
+	-webkit-column-gap: 1em;
+	column-width: 190px;
+	column-gap: 1em;
+	border-bottom: 2px dotted rgb(51,51,102);
+	padding: 4px 20px;
+}
+#biblereg-editor ol.ui-sortable li {
+	cursor: move;
+}
+#biblereg-editor li {
+	width: 186px;
+	padding: 2px;
+	border: 1px rgb(87,157,28) solid;
+	margin: 3px;
+	overflow: hidden;
+	list-style-position: inside;
+	list-style: none;
+	position: relative;
+	background: rgb(174,207,0);
+	display: block;
+}
+#biblereg-editor li.newt {
+	background-color: rgb(255,211,32);
+	border-color: rgb(255,149,14);
+}
+#biblereg-editor li.disabled {
+	background-color: rgb(204,204,204);
+	border-color: rgb(179,179,179);
+}
+#biblereg-editor li.fragment {
+	border-color: rgb(195,0,11) !important;
+}
+#biblereg-editor li.target {
+	outline: 2px solid rgb(0,69,134);
+	outline-offset: 1px;
+	background-color: rgb(183,183,234);
+}
+#biblereg-editor .makeup-editor li.related {
+	background-color: rgb(153,153,204);
+}
+#biblereg-editor li input + strong {
+	cursor: help;
+	font-size: 14px;
+}
+#biblereg-editor li input + strong + em {
+	font-size: 9px;
+	font-weight: bold;
+	font-style: normal;
+}
+#biblereg-editor li.fragment input + strong,
+#biblereg-editor li.fragment input + strong + em {
+	color: rgb(195,0,11) !important;
+}
+#biblereg-editor li input + strong + em + span {
+	font-size: 9px;
+}
+#biblereg-editor li input {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	display: inline;
+}
+#biblereg-editor .makeup-editor li input {
+	display: none;
+}
+#biblereg-editor .makeup-editor li {
+	cursor: default;
+}
+.biblereg-editor-hover {
+	background-color: rgb(49,64,4);
+}
+#biblereg-editor-controls {
+	display: none;
+	position: absolute;
+	background: rgb(51,51,102);
+	padding: 2px 4px;
+	width: 90px;
+}
+#biblereg-editor-controls option,
+#biblereg-editor-controls select {
+	text-align: center;
+}
+#biblereg-editor-controls button,
+#biblereg-editor-controls select {
+	display: block;
+	width: 90px;
+	margin: 0 auto;
+}
+#biblereg-editor-controls select {
+	width: 88px;
+}
+
+/* tartalom */
+#help {
+	width: 450px;
+	position: absolute;
+	right: 20px;
+	top: 0;
+	background: rgb(51,51,102) url(biblia.jpg) 10px 0px no-repeat;
+	color: white;
+	padding: 237px 10px 10px 10px;
+}
+h1 {
+ font: 32px bold Georgia, Times New Roman, Times, serif;
+}
+h2 {
+ font: 25px Georgia, Times New Roman, Times, serif;
+ clear: left; 
+}
+h3 {
+ font: 14px Georgia, Times New Roman, Times, serif;
+}
+#help p,
+#help li {
+	line-height: 18px;
+}
+#head {	display: none;}
+a:link { color: white; }
+a:visited { color: rgb(179, 179, 179); }
+a img { border: none }
+#biblereg a:link { color: black; } 
+#biblereg a:visited { color: rgb(79, 79, 79); }
+
+li.aamime {
+	list-style: none; 
+	background: url(icon.pdf.png) 0px 5px no-repeat; 
+	padding-left: 20px;
+	margin: 0;
+}
+li.mime.pdf { list-style-image: url(icon.pdf.png); text-align: bottom }
+li.mime.odt { background-image: url(icon.odt.png) }
+
+/* Ige-térkép*/
+#text-frame {	white-space: pre; padding: 1em 0 }
+#bible-frame {
+	position: absolute;
+	top: 180px;
+	background: white;
+	padding: 2px;
+	display: none;
+}
+#bible-frame.format1 { 	
+	left: 0px;
+	padding-left: 50px;
+	right: 0px;
+	width: auto;
+}
+#bible-frame.format1 > div { }
+#bible-frame.format1 > div > span { float: left; margin-left: -50px; height: 12px; width: 45px; padding-right: 5px; text-align: right; font-size: 11px; line-height: 12px; height: 12px; }
+#bible-frame.format1 > div > div { display: inline-block; border: 1px solid rgb(51,51,102); margin: 0 1px 1px 0; }
+#bible-frame.format1 > div > div > div { display: inline-block; border: none; width: 1px; background: silver; height: 10px }
+
+#bible-frame.format2 {
+	left: 50%;
+	margin-left: -400px;
+	width: 800px;
+	border: 1px solid rgb(51,51,102);
+}
+#bible-frame.format2 > div { display: inline; }
+#bible-frame.format2 > div > span { display: none; }
+#bible-frame.format2 > div > div { display: inline;   }
+#bible-frame.format2 > div > div > div { display: inline-block; border: none; width: 4px; background: silver; height: 4px }
+
+body #bible-frame > div > div > div.read { background: rgb(227,78,20) }
+body #bible-frame > div > div > div.read[readtime="2"] { background: rgb(207,32,34) }
+body #bible-frame > div > div > div.read[readtime="3"] { background: rgb(171,28,34) }
+body #bible-frame > div > div > div.read[readtime="4"] { background: rgb(137,10,37) }
+body #bible-frame > div > div > div.read[readtime="5"] { background: rgb(94,6,31) }
+
+#status-frame { font-size: 10px; height: 12px; oveflow: hidden; }

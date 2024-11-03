@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html 
+	  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="hu" lang="hu">
+<head>
+	<title>Halld meg az Úr Igéjét!</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="hu" />
+	<meta name="robots" content="all" />
+	<meta http-equiv="imagetoolbar" content="false" />
+	<meta name="MSSmartTagsPreventParsing" content="true" />
+	<meta name="author" content="Gyuris Gellért" />
+	<meta name="keywords" content="Biblia,kalauz" />
+	<link rel="shortcut icon" href="ui/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="ui/screen.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="ui/print.css" media="print" />
+	<script type="text/javascript" src="ui/jquery.js"></script>
+	<script type="text/javascript">
+// <![CDATA[
+// This software is licensed under the CC-GNU GPL.
+// License: http://creativecommons.org/license/cc-gpl
+// Author:  Gyuris Gellért, 2008
+// Web:     http://halld.ujevangelizacio.hu/, http://bubu.ujevangelizacio.hu/
+
+$(document).ready(function () {
+	$('a[href^=mailto:]').each(function() { // email kukac cím pont hu
+		$(this).text($(this).text().replace(/\skukac\s/g,'@').replace(/\spont\s/g, '.'));
+		$(this).attr('href',$(this).attr('href').replace(/\skukac\s/g,'@').replace(/\spont\s/g, '.'));
+	});
+	$('a[href$=.pdf]').each(function() {
+		$(this).parent().addClass('mime '+$(this).attr('href').substring($(this).attr('href').lastIndexOf('.')+1))
+	});
+});
+// ]]>
+	</script>
+</head>
+<body>
+	<div id="pg">
+		<div id="biblereg">
+		  <p>Mi az első és legfontosabb felszólítás a Bibliában? Szerintem ez:</p>
+      <p style="padding: .5em 2em; background: lightgray"><quote>Halld Izrael, az ÚR a mi Istenünk, egyedül az Úr.</quote> <br /><quote dir="rtl" style="font-family: SBL Hebrew,Ezra SIL SR,Ezra SIL,Cardo,SPTiberian,WebHebrew AD,CalWebHebrew,Times New Roman,serif; font-size: 16pt">שְׁמַ֖ע יִשְׂרָאֵ֑ל יְהוָ֥ה אֱלֹהֵ֖ינוּ יְהוָ֥ה׀ אֶחָֽד׃</quote> <br />(MTörv 6,4)</p>
+      <p>Nem az az első, hogy hidd, vagy valld, vagy hogy Uradat Istenedet egyedül imádd. Az első az, hogy halld. Hallgasd meg, amit Isten mond! Halld, mert van mondanivalója. Isten nem csend, hanem a szó, mert cselekvő…</p>
+      <p>Ehhez a meghalláshoz egy segédeszköz található az oldalon. Hogy megismerjük Isten teljes szavát, érdemes legalább egyszer elolvasni mindent szót, ami leírásra került a Szentírásban   üdvösségünk érdekében. Jó, de milyen sorrendben? Nem mindegy, mert akaratunk könnyen elvérzik, ha az Ószövetség <a href="http://szentandras.ujevangelizacio.hu/node/85">inváziós, kardélre hányós, áldozat öldökölős</a> történeteihez érünk. A megoldás az oldalon található kis alkalmazás, amellyel a kívánt sorrendet és mennyiséget tudjuk beállítani és a megadott napok számának megfelelően arányosan elosztani.</p>
+      <p>A Biblia éve 2008-ban jól alkalom volt arra, hogy egy álmomat valósággá tegyem. Az Emmausz kurzuson igazán bátorítjuk a résztvevőket arra, hogy önállóan olvassák az Igét. De nem tudtuk konkrétan megmondani, hogyan. Hát ez a válasz a hogyanra.</p>
+      <p>Miért van szükség ilyen útmutatókra? Miért nem jó az egyház napi olvasmányai? Hát… Mindig is volt egy sejtésem, hogy az egyházi napi olvasmányok (<a href="http://www.katolikus.hu/igenaptar/">igeliturgikus útmutatók</a>) nem fedik le a teljes Bibliát. Ez a mítosz, hogy „a teljes Bibliát elolvassuk 3 év alatt” számomra lelepleződött: messze nem olvassuk el a liturgiákon. Hogy konkrétan mennyit és mennyit nem, erről szól a második kis „alkalmazás”. Egy mítosszal kevesebb az egyházban.</p>
+      <p>A zsinat azt tanítja, hogy „az Ószövetség könyvei teljes terjedelmükben fölvétettek az evangéliumba” (<a href="http://uj.katolikus.hu/konyvtar.php?h=11#J30">Dei Verbum</a>). Ezt a hitet nem  látom a gyakorlatban is megvalósulni a liturgikus beosztásban. De ezen lehet segíteni :-)</p>
+      <p>Az elkészítésekor (az év zárásakor) – bár sejtettem, hogy sok részletet nem olvasunk el – mégis nagyon  megdöbbentett az eredmény. Vannak olyan könyvek, amelyekből egy vers sincs benne a normál liturgikus menetben. Még az Újszövetség minden versét se olvassuk el. A grafikon képe pedig egyenesen rémisztő. Nincs bennem lázítás, de nem is értem, hogy mire jó ez az A-B-C meg a páratlan-páros év beosztás, ha ilyen keveset olvasunk el.</p>
+      <p>Hát ezért ajánlom mindenkinek, hogy készítsen egy személyes sorrendet, ami a teljes Bibliát lefedi…</p>
+			<p>Gyuris Gellért <br /><a href="mailto:gellert.gyuris kukac ujevangelizacio pont hu">gellert.gyuris kukac ujevangelizacio pont hu</a></p>
+			<h2>Jogi közlemények</h2>
+			<p>A program és minden hozzá tartozó eredeti alkotás a <a href="http://creativecommons.org/licenses/GPL/2.0/">CC-GNU GPL licenc</a> alatt érhető el.</p>
+		</div>
+		<div id="help">
+			<div id="head">A legszebb Biblia az olvasott Biblia.</div>
+			<h2><a href="biblereg.html">Személyes Bibliaolvasó beosztás</a></h2>
+      <a href="biblereg.html"><img src="ui/biblereg.png" alt="Alkalmazás" style="float: left; margin: 0 1em 1em 0" /></a>
+      <p>Készíts személyes Bibliaolvasó sorrendet tetszésed és időd szerint! Ha nem vagy profi, akkor van néhány előre elkészített sorrend is.</p>
+      <p>Elsősorban személyes és <a href="http://szentandras.ujevangelizacio.hu/">iskolai</a> célra készült, de aki hasznosnak találja, használja szabadon.</p>
+      <h2><a href="biblemap.html">A 3 éves liturgikus beosztás mítosza</a></h2>
+      <a href="biblemap.html"><img src="ui/biblemap.png" alt="Alkalmazás" style="float: left; margin: 0 1em 1em 0" /></a>
+      <p>Még a piaristáknál tanítottak, hogy 3 év alatt elolvassuk a teljes Bibliát. Néhány gyanús részlet akadt azért, amit én soha nem hallottam liturgián (pl. a Krónikák könyveinek nemzetségtábláit, a szentély elkészítésének módját a Kivonulások könyvéből, az „átokzsoltárokat”), de végül is ebben nem voltam bizonyos. Nézzük mik a tények. Mennyit olvasunk el és mennyit nem!</p>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html 
+	  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="hu" lang="hu">
+<head>
+	<title>Halld - Személyre szabható napi beosztás készítése a Biblia olvasásáshoz</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="hu" />
+	<meta name="robots" content="all" />
+	<meta http-equiv="imagetoolbar" content="false" />
+	<meta name="MSSmartTagsPreventParsing" content="true" />
+	<meta name="author" content="Gyuris Gellért" />
+	<meta name="keywords" content="Biblia,kalauz" />
+	<link rel="shortcut icon" href="ui/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="ui/screen.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="ui/print.css" media="print" />
+	<script type="text/javascript" src="ui/jquery.js"></script>
+	<script type="text/javascript" src="ui/jqXMLUtils.js"></script>
+	<script type="text/javascript" src="ui/json2xml.js"></script>
+	<script type="text/javascript" src="ui/biblemap.js"></script>
+	<script type="text/javascript">
+// <![CDATA[
+// This software is licensed under the CC-GNU GPL.
+// License: http://creativecommons.org/license/cc-gpl
+// Author:  Gyuris Gellért, 2008
+// Web:     http://halld.ujevangelizacio.hu/, http://bubu.ujevangelizacio.hu/
+
+$(document).ready(function () {
+	bibleMap.init();
+	$('a[href^=mailto:]').each(function() { // email kukac cím pont hu
+		$(this).text($(this).text().replace(/\skukac\s/g,'@').replace(/\spont\s/g, '.'));
+		$(this).attr('href',$(this).attr('href').replace(/\skukac\s/g,'@').replace(/\spont\s/g, '.'));
+	});
+	$('a[href$=.pdf]').each(function() {
+		$(this).parent().addClass('mime '+$(this).attr('href').substring($(this).attr('href').lastIndexOf('.')+1))
+	});
+});
+// ]]>
+	</script>
+</head>
+<body class="biblemap">
+	<div id="pg">
+		<div id="biblereg">
+			<ul id="biblereg-form">
+				<li>
+				  <label>Megjelenés:</label>
+					<input type="radio" value="format1" onchange="$('#bible-frame').get(0).className=this.value;" name="format" id="format-1" checked="checked" />
+					<label for="format-1">Oszlopos formátum</label>
+				</li>
+				<li>
+					<input type="radio" value="format2" onchange="$('#bible-frame').get(0).className=this.value;" name="format" id="format-2" />
+					<label for="format-2">Összkép formátum</label>
+				</li>
+				<li></li>
+			</ul>
+			<div id="biblereg-buttons">
+				<button id="b-create"  onclick="bibleMap.create()"      disabled="disabled">1. Grafikon előállítása</button>
+				<button id="b-process" onclick="bibleMap.processData()" disabled="disabled">2. Adatok feldolgozása</button>
+			</div>
+			<div id="status-frame">&nbsp;</div>
+			<div id="text-frame">ZSOLTÁROK
+Napi zsoltárok: Zsolt 1,1-3,9
+Napi zsoltárok: Zsolt 7,1-11,7
+Napi zsoltárok: Zsolt 13,1-6
+Napi zsoltárok: Zsolt 15,1-19,15
+Napi zsoltárok: Zsolt 21,1-34,23
+Napi zsoltárok: Zsolt 37,1-40
+ADVENT ELSŐ HETE
+Vasárnap A: Iz 2,1-5 Róm 13,11-14 Mt 24,37-44
+Vasárnap B: Iz 63,16b-17.64,1.3b-8 1Kor 1,3-9 Mk 13,33-37
+Vasárnap C: Jer 33,14-16 1Tessz 3,12-4,2 Lk 21,25-28.34-36
+ADVENT MÁSODIK HETE
+Vasárnap A: Iz 11,1-10 Róm 15,4-9 Mt 3,1-12
+Vasárnap B: Iz 40,1-5.9-11 2Pét 3,8-14 Mk 1,1-8
+Vasárnap C: Bár 5,1-9 Fil 1,4-6.8-11 Lk 3,1-6
+ADVENT HARMADIK HETE
+Vasárnap A: Iz 35,1-6a.10 Jak 5,7-10 Mt 11,2-11
+Vasárnap B: Iz 61,1-2a.10-11 1Tessz 5,16-24 Jn 1,6-8.19-28
+Vasárnap C: Szof 3,14-18a Fil 4,4-7 Lk 3,10-18
+A KARÁCSONY ELŐTTI NYOLC NAP
+Vasárnap A: Iz 7,10-14 Róm 1,1-7 Mt 1,18-24
+Vasárnap B: 2Sám 7,1-5.8b-12.14a.16 Róm 16,25-27 Lk 1,26-38
+Vasárnap C: Mik 5,2-5a Zsid 10,5-10 Lk 1,39-45
+Dec. 24. Vigília: Iz 62,1-5 ApCsel 13,16-17.22-25 Mt 1,1-25
+A KARÁCSONYI ÜNNEPEK OLVASMÁNYAI
+Karácsony éjfélkor: Iz 9,2-4.6-7 Tit 2,11-14 Lk 2,1-14
+Karácsony hajnalban: Iz 62,11-12 Tit 3,4-7 Lk 2,15-20
+Karácsony ünnepi mise: Iz 52,7-10 Zsid 1,1-6 Jn 1,1-18
+KARÁCSONYI IDŐ ÜNNEPEI
+Szentcsalád: Sir 3,3-7.14-17a Kol 3,12-21 Lk 2,22-40
+Újév: Szám 6,22-27 Gal 4,4-7 Lk 2,16-21
+2. Vasárnap: Sir 24,1-4.12-16 Ef 1,3-6.15-18 Jn 1,1-18
+Vízkereszt: Iz 60,1-6 Ef 3,2-3a.5-6 Mt 2,1-12
+Jézus keresztsége: Iz 42,1-4.6-7 ApCsel 10,34-48 Mt 3,13-17
+Gyertyaszentelő: Mal 3,1-4 Zsid 2,14-18 Lk 2,22-40
+KARÁCSONY UTÁN
+NAGYBÖJT 1. HETE
+Vasárnap A: Ter 2,7-9.3,1-7 Róm 5,12-19 Mt 4,1-11
+Vasárnap B: Ter 9,8-15 1Pét 3,18-22 Mk 1,12-15
+Vasárnap C: Mtörv 26,4-10 Róm 10,8-13 Lk 4,1-13
+NAGYBÖJT 2. HETE
+Vasárnap A: Ter 12,1-4a 2Tim 1,8b-10 Mt 17,1-9
+Vasárnap B: Ter 22,1-2.9a.10-13.15-18 Róm 8,31b-34 Mk 9,1-9
+Vasárnap C: Ter 15,5-12.17-18 Fil 3,17-4,1 Lk 9,28b-36
+NAGYBÖJT 3. HETE
+Vasárnap A: Kiv 17,3-7 Róm 5,1-2.5-8 Jn 4,5-42
+Vasárnap B: Kiv 20,1-17 1Kor 1,22-25 Jn 2,13-25
+Vasárnap C: Kiv 3,1-8a.13-15 1Kor 10,1-6.10-12 Lk 13,1-9
+NAGYBÖJT 4. HETE
+Vasárnap A: 1Sám 16,1b.6-7.10-13a Ef 5,8-14 Jn 9,1-41
+Vasárnap B: 2Krón 36,14-16.19-23 Ef 2,4-10 Jn 3,14-21
+Vasárnap C: Józs 5,9a.10-12 2Kor 5,17-21 Lk 15,1-3.11-32
+NAGYBÖJT 5. HETE
+Vasárnap A: Ez 37,12-14 Róm 8,8-11 Jn 11,1-45
+Vasárnap B: Jer 31,31-34 Zsid 5,7-9 Jn 12,20-33
+Vasárnap C: Iz 43,16-21 Fil 3,8-14 Jn 8,1-11
+NAGYHÉT 
+Virágvasárnap körmenet A: Mt 21,1-10
+Virágvasárnap körmenet B: Mk 11,1-10 Jn 12,12-16
+Virágvasárnap körmenet C: Lk 19,28-40
+Virágvasárnap mise: Iz 50,4-7 Fil 2,6-11 
+Virágvasárnap mise A: Mt 26,14-27,66 Mt 27,11-54
+Virágvasárnap mise B: Mk 14,1-15,47 Mk 15,1-39
+Virágvasárnap mise C: Lk 22,14-23,56 Lk 23,1-49
+Vigília: Kiv 14,15-15,1.5,7-9 Róm 6,3-11
+Vigília A: Mt 28,1-10
+Vigília B: Mk 16,1-8
+Vigília C: Lk 24,1-12
+NAGYBÖJTI ÜNNEPEK
+Szent József: 2Sám 7,4-5a.12-14a.16 Róm 4,13.16-18.22 Mt 1,16-18-21 Lk 2,41-51a
+Gyümölcsoltó: Iz 7,10-14 Zsid 10,4-10 Lk 1,26-38
+HÚSVÉT HETE
+Vasárnap: ApCsel 10,34a.37-43 Kol 3,1-4 Jn 20,1-9
+HÚSVÉT 2. HETE
+Vasárnap A: ApCsel 2,42-47 1Pét 1,3-9 Jn 20,19-31
+Vasárnap B: ApCsel 4,32-35 1Jn 5,1-6 Jn 20,19-31
+Vasárnap C: ApCsel 5,12-16 Jel 1,9-11a.12-13.17-19 Jn 20,19-31
+HÚSVÉT 3. HETE
+Vasárnap A: ApCsel 2,14.22-28 1Pét 1,17-21 Lk 24,13-35
+Vasárnap B: ApCsel 3,13-15.17-19 1Jn 2,1-5a Lk 24,35-48
+Vasárnap C: ApCsel 5,27b-32.40b-41 Jel 5,11-14 Jn 21,1-19
+HÚSVÉT 4. HETE
+Vasárnap A: ApCsel 2,14a.36-41 1Pét 2,20b-25 Jn 10,1-10
+Vasárnap B: ApCsel 4,8-12 1Jn 3,1-2 Jn 10,11-18
+Vasárnap C: ApCsel 13,14.43-52 Jel 7,9.14b-17 Jn 10,27-30
+HÚSVÉT 5. HETE
+Vasárnap A: ApCsel 6,1-7 1Pét 2,4-9 Jn 14,1-12
+Vasárnap B: ApCsel 9,26-31 1Jn 3,18-24 Jn 15,1-8
+Vasárnap C: ApCsel 14,20b-26 Jel 21,1-5a Jn 13,31-33a.34-35
+HÚSVÉT 6. HETE
+Vasárnap A: ApCsel 8,5-8.14-17 1Pét 3,15-18 Jn 14,15-21
+Vasárnap B: ApCsel 10,25-26.34-35.44-48 1Jn 4,7-10 Jn 15,9-17
+Vasárnap C: ApCsel 15,1-2.22-29 Jel 21,10-14.22-23 Jn 14,23-29
+HÚSVÉT 7. HETE
+Vasárnap A: ApCsel 1,12-14 1Pét 4,13-16 Jn 17,1-11a
+Vasárnap B: ApCsel 1,15-17.20a.20c-26 1Jn 4,11-16 Jn 17,11b-19
+Vasárnap C: ApCsel 7,55-60 Jel 22,12-14.16-17.20 Jn 17,20-26
+HÚSVÉTI ÜNNEPEK
+Áldozócsütörtök: ApCsel 1,1-11 Ef 1,17-23 
+Áldozócsütörtök A: Mt 28,16-20
+Áldozócsütörtök B: Mk 16,15-20
+Áldozócsütörtök C: Lk 24,46-53
+Pünkösd Vigília: Ter 11,1-9 Róm 8,22-27 Jn 7,37-39
+Pünkösd: ApCsel 2,1-11 1Kor 12,3b-7.12-13 Jn 20,19-23
+Pünkösd Hétfő: ApCsel 10,34a-48 Jn 15,26-27.16,1-3.12-15
+II. ÉVKÖZI HÉT
+Vasárnap A: Iz 49,3.5-6 1Kor 1,1-3 Jn 1,29-34
+Vasárnap B: 1Sám 3,3b-10.19 1Kor 6,13c-15a.17-20 Jn 1,35-42
+Vasárnap C: Iz 62,1-5 1Kor 12,4-11 Jn 2,1-12
+III. ÉVKÖZI HÉT
+Vasárnap A: Iz 9,1-4 1Kor 1,10-13.17 Mt 4,12-23
+Vasárnap B: Jón 3,1-5.10 1Kor 7,29-31 Mk 1,14-20
+Vasárnap C: Neh 8,2-4a.5-6.8-10 1Kor 12,12-30 Lk 1,1-4.4,14-21
+IV. ÉVKÖZI HÉT
+Vasárnap A: Szof 2,3.3,12-13 1Kor 1,26-31 Mt 5,1-12a
+Vasárnap B: Mtörv 18,15-20 1Kor 7,32-35 Mk 1,21-28
+Vasárnap C: Jer 1,4-5.17-19 1Kor 12,13-13,13 Lk 4,21-30
+V. ÉVKÖZI HÉT
+Vasárnap A: Iz 58,7-10 1Kor 2,1-5 Mt 5,13-16
+Vasárnap B: Jób 7,1-4.6-7 1Kor 9,16-19.22-23 Mk 1,29-39
+Vasárnap C: Iz 6,1-2a.3-8 1Kor 15,1-11 Lk 5,1-11
+VI. ÉVKÖZI HÉT
+Vasárnap A: Sir 15,16-21 1Kor 2,6-10 Mt 5,17-37
+Vasárnap B: Lev 13,1-2.44-46 1Kor 10,31-11,1 Mk 1,40-45
+Vasárnap C: Jer 17,5-8 1Kor 15,12.16-20 Lk 6,17.20-26
+VII. ÉVKÖZI HÉT
+Vasárnap A: Lev 19,1-2.17-18 1Kor 3,16-23 Mt 5,38-48
+Vasárnap B: Iz 43,18-19.21-22.24b-25 2Kor 1,18-22 Mk 2,1-12
+Vasárnap C: 1Sám 26,2.7-9.12-13.22-23 1Kor 15,45-49 Lk 6,27-38
+VIII. ÉVKÖZI HÉT
+Vasárnap A: Iz 49,14-15 1Kor 4,1-5 Mt 6,24-34
+Vasárnap B: Óz 2,14b.15b.19-20 2Kor 3,1b-6 Mk 2,18-22
+Vasárnap C: Sir 27,5-8 1Kor 15,54-58 Lk 6,39-45
+IX. ÉVKÖZI HÉT
+Vasárnap A: Mtörv 11,18.26-28 Róm 3,21-25a.28 Mt 7,21-27
+Vasárnap B: Mtörv 5,12-15 2Kor 4,6-11 Mk 2,23-3,6
+Vasárnap C: 1Kir 8,41-43 Gal 1,1-2.6-10 Lk 7,1-10
+X. ÉVKÖZI HÉT
+Vasárnap A: Óz 6,3-6 Róm 4,18-25 Mt 9,9-13
+Vasárnap B: Ter 3,9-15 2Kor 4,13-5,1 Mk 3,20-35
+Vasárnap C: 1Kir 17,17-24 Gal 1,11-19 Lk 7,11-17
+XI. ÉVKÖZI HÉT
+Vasárnap A: Kiv 19,2-6a Róm 5,6-11 Mt 9,36-10,8
+Vasárnap B: Ez 17,22-24 2Kor 5,6-10 Mk 4,26-34
+Vasárnap C: 2Sám 12,7-10.13 Gal 2,16,19-21 Lk 7,36-8,3
+XII. ÉVKÖZI HÉT
+Vasárnap A: Jer 20,10-13 Róm 5,12-15 Mt 10,26-33
+Vasárnap B: Jób 38,1.8-11 2Kor 5,14-17 Mk 4,35-41
+Vasárnap C: Zak 12,10-11 Gal 3,26-29 Lk 9,18-24
+XIII. ÉVKÖZI HÉT
+Vasárnap A: 2Kir 4,8-11.14-16a Róm 6,3-4.8-11 Mt 10,37-42
+Vasárnap B: Bölcs 1,13-15.2,23-24 2Kor 8,7.9.13-15 Mk 5,21-43
+Vasárnap C: 1Kir 19,16b.19-21 Gal 4,31b-5,1.13-18 Lk 9,51-62
+XIV. ÉVKÖZI HÉT
+Vasárnap A: Zak 9,9-10 Róm 8,9.11-13 Mt 11,25-30
+Vasárnap B: Ez 2,2-5 2Kor 12,7-10 Mk 6,1-6
+Vasárnap C: Iz 66,10-14c Gal 6,14-18 Lk 10,1-12
+XV. ÉVKÖZI HÉT
+Vasárnap A: Iz 55,10-11 Róm 8,18-23 Mt 13,1-23 (1-9)
+Vasárnap B: Ám 7,12-15 Ef 1,3-14 Mk 6,7-13
+Vasárnap C: Mtörv 30,10-14 Kol 1,15-20 Lk 10,25-37
+XVI. ÉVKÖZI HÉT
+Vasárnap A: Bölcs 12,13.16-19 Róm 8,26-27 Mt 13,24-43
+Vasárnap B: Jer 23,1-6 Ef 2,13-18 Mk 6,30-34
+Vasárnap C: Ter 18,1-10a Kol 1,24-28 Lk 10,38-42
+XVII. ÉVKÖZI HÉT
+Vasárnap A: 1Kir 3,5.7-12 Róm 8,28-30 Mt 13,44-52
+Vasárnap B: 2Kir 44,42-44 Ef 4,1-6 Jn 6,1-15
+Vasárnap C: Ter 18,20-32 Kol 2,12-14 Lk 11,1-13
+XVIII. ÉVKÖZI HÉT
+Vasárnap A: Iz 55,1-3 Róm 8,35.37-39 Mt 14,13-21
+Vasárnap B: Kiv 16,2-4.12-15 Ef 4,17.20-24 Jn 6,24-35
+Vasárnap C: Préd 1,2.2,21-23 Kol 3,1-5.9-11 Lk 12,13-21
+XIX. ÉVKÖZI HÉT
+Vasárnap A: 1Kir 19,9a.11-13a Róm 9,1-5 Mt 14,22-33
+Vasárnap B: 1Kir 19,4-8 Ef 4,30-5,2 Jn 6,41-52
+Vasárnap C: Bölcs 18,6-9 Zsid 11,1-2.8-19 Lk 12,32-48
+XX. ÉVKÖZI HÉT
+Vasárnap A: Iz 56,1.6-7 Róm 11,13-15.29-32 Mt 15,21-28
+Vasárnap B: Péld 9,1-6 Ef 5,15-20 Jn 6,51-58
+Vasárnap C: Jer 38,4-6.8-10 Zsid 12,1-4 Lk 12,49-53
+XXI. ÉVKÖZI HÉT
+Vasárnap A: Iz 22,19-23 Róm 11,33-36 Mt 16,13-20
+Vasárnap B: Józs 24,1-2a.15-17.18b Ef 5,21-32 Jn 6,61-70
+Vasárnap C: Iz 66,18-21 Zsid 12,5-7.11-13 Lk 13,22-30
+XXII. ÉVKÖZI HÉT
+Vasárnap A: Jer 20,7-9 Róm 12,1-2 Mt 16,21-27
+Vasárnap B: Mtörv 4,1-2.6-8 Jak 1,17-18.21b-22-27 Mk 7,1-8a.14-15.21-23
+Vasárnap C: Sir 3,19-21.30-31 Zsid 12,18-19.22-24a Lk 14,1.7-14
+XXIII. ÉVKÖZI HÉT
+Vasárnap A: Ez 33,7-9 Róm 13,8-10 Mt 18,15-20
+Vasárnap B: Iz 35,4-7a Jak 2,1-5 Mk 7,31-37
+Vasárnap C: Bölcs 9,13-19 Filem 1,9b-10.12-17 Lk 14,25-33
+XXIV. ÉVKÖZI HÉT
+Vasárnap A: Sir 27,33-28,9 Róm 14,7-9 Mt 18,21-35
+Vasárnap B: Iz 50,5-9a Jak 2,14-18 Mk 8,27-35
+Vasárnap C: Kiv 32,7-11.13-14 1Tim 1,12-17 Lk 15,1-32
+XXV. ÉVKÖZI HÉT
+Vasárnap A: Iz 55,6-9 Fil 1,20c-24.27a Mt 20,1-16a
+Vasárnap B: Bölcs 2,17-20 Jak 3,16-4,3 Mk 9,29-36
+Vasárnap C: Ám 8,4-7 1Tim 2,1-8 Lk 16,1-13
+XXVI. ÉVKÖZI HÉT
+Vasárnap A: Ez 18,25-28 Fil 2,1-11 Mt 21,28-32
+Vasárnap B: Szám 11,25-29 Jak 5,1-6 Mk 9,37-42.46-47
+Vasárnap C: Ám 6,1a.4-7 1Tim 6,11-16 Lk 16,19-31
+XXVII. ÉVKÖZI HÉT
+Vasárnap A: Iz 5,1-7 Fil 4,6-9 Mt 21,33-43
+Vasárnap B: Ter 2,18-24 Zsid 2,9-11 Mk 10,2-16
+Vasárnap C: Hab 1,2-3.2,2-4 2Tim 1,6-8.13-14 Lk 17,5-10
+XXVIII. ÉVKÖZI HÉT
+Vasárnap A: Iz 25,6-10a Fil 4,12-14.19-20 Mt 22,1-13
+Vasárnap B: Bölcs 7,7-11 Zsid 4,12-13 Mk 10,17-30
+Vasárnap C: 2Kir 5,14-17 2Tim 2,8-13 Lk 17,11-19
+XXIX. ÉVKÖZI HÉT
+Vasárnap A: Iz 45,1.4-6 1Tessz 1,1-5b Mt 22,15-21
+Vasárnap B: Iz 53,10-11 Zsid 4,14-16 Mk 10,35-45
+Vasárnap C: Kiv 17,8-13 2Tim 3,14-4,2 Lk 18,1-8
+XXX. ÉVKÖZI HÉT
+Vasárnap A: Kiv 22,21-27 1Tessz 1,5c-10 Mt 22,34-40
+Vasárnap B: Jer 31,7-9 Zsid 5,1-6 Mk 10,46-52
+Vasárnap C: Sir 35,15b-17.20-22a 2Tim 4,6-8.16,18 Lk 18,9-14
+XXXI. ÉVKÖZI HÉT
+Vasárnap A: Mal 1,14b.2,2b.8-10 1Tessz 2,7b-9.13 Mt 23,1-12
+Vasárnap B: Mtörv 6,2-6 Zsid 7,23-28 Mk 12,28b-34
+Vasárnap C: Bölcs 11,23.12,2 2Tessz 1,11-2,2 Lk 19,1-10
+XXXII. ÉVKÖZI HÉT
+Vasárnap A: Bölcs 6,13-17 1Tessz 4,12-18 Mt 25,1-13
+Vasárnap B: 2Kir 17,10-16 Zsid 9,24-28 Mk 12,38-44
+Vasárnap C: 2Makk 7,1-2.9-14 2Tessz 2,15-3,5 Lk 20,27-38
+XXXIII. ÉVKÖZI HÉT
+Vasárnap A: Péld 31,10-13.19-20.30-31 1Tessz 5,1-6 Mt 25,14-30
+Vasárnap B: Dán 12,1-3 Zsid 10,11-14.18 Mk 13,24-32
+Vasárnap C: Mal 3,19-20a 2Tessz 3,7-12 Lk 21,5-19
+XXXIV. ÉVKÖZI HÉT
+Vasárnap A: Ez 34,11-12.15-17 1Kor 15,20-26a.28 Mt 25,31-46
+Vasárnap B: Dán 7,13-14 Jel 1,5-8 Jn 18,33b-37
+Vasárnap C: 2Sám 5,1-3 Kol 1,12-20 Lk 23,35-43
+</div>
+		<div id="text-output"></div>
+		</div>
+		<div id="help">
+			<div id="head">A legszebb Biblia az olvasott Biblia.</div>
+			<h1>Halld – napi személyre szabható Bibliaolvasó beosztás</h1>
+			<h2>Mi ez?</h2>
+      <p>Egy „bibliaolvasási térkép”, ahogy én becézem. Valójában egy grafikonkészítő webes alkalmazás, ami megmutatja, hogy az (kat.) egyházi liturgikus igebeosztással mely részeket olvassuk el a teljes Bibliából és végül összegzi az eredményt.  Én kíváncsi voltam erre, ha te is, indítsd!</p>
+			<h2>Böngészők</h2>
+			<a href="http://www.spreadfirefox.com/node&amp;id=8988&amp;t=209"><img border="0" alt="Firefox 3" title="Firefox 2" src="http://sfx-images.mozilla.org/affiliates/Buttons/firefox2/firefox-spread-btn-1.png" style="float: left; margin: 0 12px 0 0" /></a>
+			<a href="http://www.google.com/chrome/index.html?hl=hu"><img src="http://upload.wikimedia.org/wikipedia/hu/thumb/3/35/GoogleChromeLogo.png/64px-GoogleChromeLogo.png" alt="Google Chrome" title="Google Chrome"  style="float: left; margin: .5em  36px 0 0; clear: left" /></a>
+      <p>Firerox 3.1 alatt fejlesztettem, és nem volt célom, hogy minden böngészőn működjön. Működik tehát Firefox 3, Opera 9.6, és Google Chrome alatt (ez utóbbival tényleg hasít, mint a szélvész). Nem működik Internet Explorer 7 alatt, sem Safari-val, a jövőben sem tervezem ezek támogatását.</p>
+			<h2>Használati útmutató</h2>
+      <p>Az „1. Grafikon előállítása” gombbal indíts, amely a szentírási könyvek, fejezetek és versek számát ábrázoló grafikont készít. Amikor ez elkészült, indíthatod a „2. Adatok feldolgozása” gombbal a rajz készítését. A gombok alatti területen nyomon követheted a folyamat állapotát (és majdan a végeredményt).</p>
+      <p>A megjelenést két módon lehet szabályozni: Az „Oszlopos formátum” az alapértelmezett nézet, amelyen megfigyelhetjük a könyvek, fejezetek határait is. Az „Összkép formátum” térképszerű, csak a versekre koncentrál és a vizuális kiértékelést segíti. A feldolgozó folyamatok előtt, között és utána is lehet változtatni a két nézet között.</p>
+      <p>Az egeret az ábra – illetve az egyes igehelyeket jelentő téglalapok/négyzetek – fölé víve láthatjuk, hogy azt igehelyet mikor olvassuk.</p>
+			<h2>Értelmezés</h2>
+      <p>A grafikonon egyre sötétebb színnel vannak jelölve azok az igehelyek, amelyeket többször is olvasunk. (Egyedül a Zsoltárok könyvében nem látható ez adathiány miatt.) Figyelem! Ezt úgy kell érteni, hogy a megadott lista hányszor tartalmazza a részletet.</p>
+      <p>A többszöri olvasást tehát nem úgy kell érteni, hogy a 3 liturgikus év alatt hányszor olvassuk el az adott  részletet (pl. a páros vagy páratlan évek hétköznapi szövegeinek egyikét 3 év alatt 2× olvassuk).</p>
+			<h2>Személyes értékelés</h2>
+      <p>Szerintem a 30% nagyon kevés 3 év alatt. Számomra ez a néhány nap, amíg ezen dolgoztam „mítosztalanító” lett. A liturgiát és annak tisztelét megőrizve, én arra bátorítok minden hívőt, hogy olvassa el a teljes Bibliát legalább 1× az életben.  Szt. Jeromos után szabadon egy kérdés: Aki a Szentírás 30%-át ismeri, Krisztust is csak 30%-osan ismerheti meg?</p>
+      <p>Jó lenne, ha lennének olyan katolikus kiadványok a teljes Bibliánkra, mint a Szentírás Szövetség által kiadott <a href="http://www.szentirasszovetseg.net/kiadvnyaink.htm">„Napról napra”</a> című négykötetes könyvecskéje az Újszövetséghez. Szerintem kiállítások szervezése helyett valami ilyesmi könyvecske készítésével és kiadásával többet értünk volna el a Biblia évében.</p>
+			<h2>Felhasznált adatok és fejlesztés</h2>
+      <p>Akkor döntöttem a megvalósítás mellet, amikor a feleségem a <a href="http://szepi.hu/">Szegedi Piaristáktól</a> hazahozta a nemrég kiadott „Liturgikus Öröknaptár” (Szeged, 2008., szerkesztette: Mészáros Ferenc és Szegheő József SP) című könyvecskét, amely tudtom szerint az első ilyen magyar kiadvány. A napi olvasmányos beosztást innen vettem át néhány hibajavítással (nem létező versekre való utalásokat javítottam). Ez a lista látható a bal oldali hasábban: ünnepnapok A-B-C évre, ünnepek hétköznapjai, évközi idők páratlan és páros olvasmányai (ez utóbbi nincs megkülönböztetve a listában az egyszerűség kedvéért).</p>
+      <p>A fent említett naptár nem tartalmazza a napi részt a Zsoltárok könyvéből. A Zsoltárokat tehát csak megközelítő pontossággal tudom prezentálni: A <a href="http://www.benceskiado.hu/">Bencés Kiadó</a> egy éves igeliturgikus naptárját átlapozva minden egyes zsoltárt, amely egyszer szerepelt a teljes év során, azt kigyűjtöttem (átszámozva a Vulgáta számozását a héber számozásra). Jobb megoldást nem találtam erre. A bal oldali lista első néhány sora tehát innen ered.</p>
+      <p>A Bibliát (könyvek, fejezetek, versek mérete) a <a href="http://sourceforge.net/projects/zefania-sharp/">Zefania XML Bible Markup Language</a> fejlesztőitől vettem, mégpedig kiindulási alapnak a <a href="http://sourceforge.net/project/showfiles.php?group_id=89078&package_id=93721">francia nyelvű Jeruzsálemi Bibliát</a> (La Bible de Jerusalem, sf_deje.zip) használtam, mert ebben találtam meg a „katolikus” könyveket és részleteket a legteljesebben. Az ebből generált listát kézzel kellet több helyen is módosítanom – egyrészt a mellékelt hibajegyzék alapján, ill. a saját magam által észrevett hibák alapján. Ezek felsorolása megtekinthetők <a href="biblemap.xml">magában az XML fájlban</a>.</p>
+      <p>Köszönet a Zefania fejlesztőinek és a Liturgikus öröknaptár szerkesztőinek!</p>
+			<h2>Hibabejelentés</h2>
+      <p>Annyira megdöbbentett a kapott végeredmény, hogy folyton hibát kerestem az adatokban ill. a programban. De nem találtam, legfeljebb 1-2 versnyi eltéréseket javítottam.</p>
+      <p>Ha valaki lényeges hibát talál, ami a végeredményt nagyban befolyásolná, kérem, feltétlenül szóljon róla!</p>
+			<p>Gyuris Gellért: <a href="mailto:gellert.gyuris kukac ujevangelizacio pont hu">gellert.gyuris kukac ujevangelizacio pont hu</a></p>
+      <h2>Változások</h2>
+      <ul>
+        <li>Első kiadás: 2008. december 25., karácsony</li>
+        <li>Fejlesztés kezdete: 2008. december 20.</li>
+      </ul>
+			<h2>Jogi közlemények</h2>
+			<p><a href="http://creativecommons.org/licenses/GPL/2.0/"><img alt="CC-GNU GPL" src="http://creativecommons.org/images/public/cc-GPL-a.png" style="float: left; margin: 0 1em 0 0" /></a>A program és minden hozzá tartozó eredeti alkotás a <a href="http://creativecommons.org/licenses/GPL/2.0/">CC-GNU GPL licenc</a> alatt érhető el.</p>
+			<p>A program felhasználja az alábbi munkákat: <a href="http://jquery.com/">jQuery</a>, <a href="http://www.terracoder.com/">xmlObjectifier</a>, <a href="http://goessner.net/download/prj/jsonxml/">json2xml</a>.</p>
+		</div>
+	</div>
+	<div id="bible-frame" class="format1"></div>
+</body>
+</html>

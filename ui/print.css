@@ -1,0 +1,29 @@
+@charset "UTF-8";
+#biblereg-form,
+#biblereg-editor,
+#biblereg-buttons,
+#biblereg-comment,
+#text-frame,
+#text-output,
+#help {
+    display: none !important;
+}
+html, body {
+    font: 11px "Lucida Grande", "Lucida Sans Unicode", Verdana, Helvetica, sans-serif;
+    background-color: white;
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+body.biblemap ul#biblereg-result {
+    list-style: none;
+    margin: 1em 0;
+    padding: 0;
+}
+body.biblemap ul#biblereg-result li {
+    margin: 0;
+    padding: 0;
+}
+body.biblereg #bible-frame {
+	display: block;
+}

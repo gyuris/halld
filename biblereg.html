@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html 
+	  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="hu" lang="hu">
+<head>
+	<title>Halld - Személyre szabható napi beosztás készítése a Biblia olvasásáshoz</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="hu" />
+	<meta name="robots" content="all" />
+	<meta http-equiv="imagetoolbar" content="false" />
+	<meta name="MSSmartTagsPreventParsing" content="true" />
+	<meta name="author" content="Gyuris Gellért" />
+	<meta name="keywords" content="Biblia,kalauz" />
+	<link rel="shortcut icon" href="ui/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="ui/screen.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="ui/print.css" media="print" />
+	<script type="text/javascript" src="ui/jquery.js"></script>
+	<script type="text/javascript" src="ui/jqXMLUtils.js"></script>
+	<script type="text/javascript" src="ui/json2xml.js"></script>
+	<script type="text/javascript" src="ui/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="ui/ui.mouse.js"></script>
+	<script type="text/javascript" src="ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="ui/ui.droppable.js"></script>
+	<script type="text/javascript" src="ui/ui.sortable.js"></script>
+	<script type="text/javascript" src="ui/ui.datepicker.js"></script>
+	<script type="text/javascript" src="ui/ui.datepicker-hu.js"></script>
+	<script type="text/javascript" src="ui/biblereg.js"></script>
+	<script type="text/javascript">
+// <![CDATA[
+// This software is licensed under the CC-GNU GPL.
+// License: http://creativecommons.org/license/cc-gpl
+// Author:  Gyuris Gellért, 2008
+// Web:     http://halld.ujevangelizacio.hu/, http://bubu.ujevangelizacio.hu/
+
+$(document).ready(function () {
+	bibleReg.init();
+	$('a[href^=mailto:]').each(function() { // email kukac cím pont hu
+		$(this).text($(this).text().replace(/\skukac\s/g,'@').replace(/\spont\s/g, '.'));
+		$(this).attr('href',$(this).attr('href').replace(/\skukac\s/g,'@').replace(/\spont\s/g, '.'));
+	});
+	$('a[href$=.pdf]').each(function() {
+		$(this).parent().addClass('mime '+$(this).attr('href').substring($(this).attr('href').lastIndexOf('.')+1))
+	});
+});
+// ]]>
+	</script>
+</head>
+<body class="biblereg">
+	<div id="pg">
+		<div id="biblereg">
+			<textarea id="biblereg-log" cols="50" rows="10" style="display:none"></textarea>
+			<ul id="biblereg-form">
+				<li>
+					<label for="biblereg-select">Sorrend sablon:</label> 
+					<select id="biblereg-select" disabled="disabled"></select>
+				</li>
+				<li>
+					<label for="biblereg-day">Napok száma:</label>
+					<input  id="biblereg-day" type="text" disabled="disabled" value="365" />
+				</li>
+				<li>
+					<input  id="biblereg-days" type="checkbox" />
+					<label for="biblereg-days">Fejezetek számának megjelenítése</label>
+				</li>
+				<li>
+					<input  id="biblereg-date" type="checkbox" />
+					<label for="biblereg-date">Dátum beszúrása a nap sorszáma helyett</label>
+				</li>
+				<li>
+					<label for="biblereg-startday">Kezdőnap:</label> 
+					<input type="text" id="biblereg-startday" />
+				</li>
+			</ul>
+			<div id="biblereg-buttons">
+				<button id="biblereg-button" onclick="bibleReg.create($('#biblereg-day').val())" disabled="disabled">Napi beosztás készítése</button>
+				<button id="biblereg-toggle" onclick="bibleReg.toggleEditor()" disabled="disabled">Sorrendszerkesztő bekapcsolása</button>
+			</div>
+			<div id="biblereg-comment"></div>
+			<ul id="biblereg-result"></ul>
+		</div>
+		<div id="help">
+			<div id="head">A legszebb Biblia az olvasott Biblia.</div>
+			<h1>Halld – napi személyre szabható Bibliaolvasó beosztás</h1>
+			<p>Ez a kis alkalmazás abban segít, hogy olyan beosztásokat készítsünk a Biblia napi olvasásához, amelyet valóban követni is képesek leszünk. Hogy teljesen személyre szabott legyen, kiválaszthatjuk a napok számát, a könyvek és azok fejezeteinek sorrendjét – hogy logikus sorrendben olvassuk –, a számítógép pedig arányosan elosztja.</p>
+			<p>Akár egyből ki is lehet nyomtatni, vagy a generált lista szövegét átemelve egy szövegszerkesztőbe, tetszőlegesen formázhatjuk azt. Négy ilyen módon előre elkészített listát közre is adunk:</p>
+			<ul>
+				<li><a href="365_teljes_logikus1.pdf">A teljes katolikus Biblia szövege logikusan sorba rendezve egy évre, napi 3–4 fejezet</a></li>
+				<li><a href="730_teljes_logikus1.pdf">A teljes katolikus Biblia szövege logikusan sorba rendezve <strong>két</strong> évre, napi 1–2 fejezet</a></li>
+				<li><a href="365_ujszov&amp;zsolt_logikus1.pdf">Az Újszövetség és a Zsoltárok szövege logikusan sorba rendezve egy évre, napi 1–2 fejezet</a></li>
+				<li><a href="250_ujszovetseg_naprolnapra.pdf">Az Újszövetség könyvei logikusan sorba rendezve 250 napra, napi 1 vagy 2 fejezet</a></li>
+				<li><a href="730_teljes_gyurki1.pdf">Gyürki László beosztása 2 évre (Szép Attila munkája)</a></li>
+			</ul>
+			<h2>Képességek</h2>
+			<ul>
+				<li>Elmentett könyvsorrendek kiválasztása.</li>
+				<li>Ezen sorrendek módosítása: könyvek sorrendjeinek meghatározása, a könyvek több részletre valló tördelése, a könyvtöredékek összevonása.</li>
+				<li>A napok számának megadása.</li>
+				<li>A beosztás kívánt kezdődátummal megjelölése, vagy a napok sorszámozása.</li>
+			</ul>
+			<h2>Korlátok</h2>
+			<ul>
+				<li>Csak egész fejezeteket tud kezelni, verseket nem. Vagyis pl. a teljes 1328 fejezetet 1328 napnál több napra nem tudja elosztani.</li>
+				<li>Így az egyenletes elosztásban nem veszi figyelembe az egyes fejezetek hosszúságát.</li>
+				<li>A sorrendszerkesztő használható ugyan több böngészőben, de igazán kényelmesen Firefoxszal lehet kezelni.
+				</li>
+			</ul>
+			<h2>Használati útmutató</h2>
+			<h3>Beosztás készítése</h3>
+			<ul>
+				<li>A „Sorrend sablon” választólistában válasszuk ki a kívánt sorrendet. Több előre elkészített sorrend is fellelhető a hagyományos, elterjedt Vulgáta sorrendje mellett. Ha szeretnénk látni a könyvek sorrendjét, akkor kapcsoljuk be, majd ki a Sorrendszerkesztőt („Sorrendszerkesztő bekapcsolása”).</li>
+				<li>A „Napok száma” mezőben számmal adjuk meg a kívánt napok számát.</li>
+				<li>A „Fejezetek számának megjelenítése” jelölőnégyzet bejelölése esetét egy kis ábrát is láthatunk majd az arányos eloszlásról.</li>
+				<li>A „Dátum beszúrása a nap sorszáma helyett” jelölnégyzetet az alapértelmezett kikapcsolt állapotában azt eredményezi, hogy a napokat sorszámozva láthatjuk a listában. Ha ezt bejelöljük, akkor a megadott kezdőnaptól kezdve folyamatosan dátumozott napokat fogunk kapni a listában. Állítsuk be ilyenkor a kívánt kezdőnapot.</li>
+				<li>A listát a „A napi beosztás készítése” gomb generálja újra.</li>
+			</ul>
+			<h3>Sorrendszerkesztő használata</h3>
+			<ul>
+				<li>A Sorrendszerkesztőt a „Sorrendszerkesztő bekapcsolása” gombbal kell indítani. A könyvek sorrendje fentről lefelé és balról jobbra haladva következik. Az ó- és újszövetségi könyvek különböző módon vannak jelölve, úgyszintén a kikapcsolt és tördelt könyvek is.</li>
+				<li>A könyvek sorrendjét fogd és ejts módon tudjuk változtatni.</li>
+				<li>Ha egy könyvet ki akarunk venni, akkor a jobb felső sarkában található jelölőnégyzetet kapcsoljuk ki.</li>
+				<li>Ha szeretnénk egy könyvet felbontani több részre, akkor ezt a „Könyvtördelés bekapcsolása” gombbal indíthatjuk. Kattintsunk a felosztani kívánt könyvre. A könyv kijelölődik. Megjelenik egy  választólista, ahol a törés helyének beállítsa utána a „Szétválaszt” gombra kattintva a könyv két részre oszlik. Addig oszthatunk egy könyvet, míg az 1 fejezet hosszú lesz. Vegyük észre, hogy a szétválasztott könyvek vizuálisan is meg vannak jelölve.
+					<br />Ha szeretnénk egy szétosztott könyvet újra összevonni, akkor kattintsunk arra a darabjára, ahol szeretnénk a könyvet az összevonás után találni. Rákattintás után az összes darabja kijelölődik. Az „Összevon” gombra kattintva összevonódnak a darabok. Összevonás esettén minden darab összevonódik, nincs lehetőség csak két darab összevonására.
+					<br />A „Könyvtördelés kikapcsolása” gombbal kerülünk vissza a Sorrendszerkesztőhöz.</li>
+				<li>Ha a kívánt sorrend előállt, a „Sorrendszerkesztő kikapcsolása” gombbal tudunk visszatérni a lista generálása funkcióhoz.</li>
+				<li>Ha újra megnyitjuk a Sorrendszerkesztőt, az utoljára otthagyott állapot fogad bennünket. Azonban ha más sablont nyitunk meg időközben, az felülírja a módosításáinkat.</li>
+			</ul>
+			<h2>Dokumentáció</h2>
+			<ul>
+				<li><a href="dc/dokumentacio.pdf">Az alkalmazás képekkel illusztrált dokumentációja.</a></li>
+			</ul>
+			<h2>Változások</h2>
+			<ul>
+				<li>Első kiadás: 2008. március 23., húsvét – A mentés még nem működik.</li>
+				<li>Fejlesztés kezdete: 2008. január 16.</li>
+			</ul>
+			<h2>Hibajelzések és kérések, új sorrendek</h2>
+			<p>Gyuris Gellért: <a href="mailto:gellert.gyuris kukac ujevangelizacio pont hu">gellert.gyuris kukac ujevangelizacio pont hu</a></p>
+			<p>Egyelőre nem működik az automatikus mentés, ezért szívesen veszem, ha valaki új sorrenddel gyarapítja a már meglévőket. A Sorrendszerkesztőben található „Sorrend mentése” gomb hatására egy új űrlapmezőbe megjelenik egy XML kód, ezt kérem kimásolni és elküldeni.</p>
+			<h2>Jogi közlemények</h2>
+			<p>A program és minden hozzá tartozó eredeti alkotás a <a href="http://creativecommons.org/licenses/GPL/2.0/">CC-GNU GPL licenc</a> alatt érhető el.</p>
+			<p>A program felhasználja az alábbi munkákat: <a href="http://jquery.com/">jQuery</a>, <a href="http://docs.jquery.com/UI/Datepicker">jQuery UI/Datepicker</a>, <a href="http://www.terracoder.com/">xmlObjectifier</a>, <a href="http://goessner.net/download/prj/jsonxml/">json2xml</a>, <a href="http://www.biblia-tarsulat.hu/docum/naptar.htm">Gyürki László: 2 éves beosztás</a> [szerzői engedéllyel].</p>
+		</div>
+	</div>
+	<div id="biblereg-editor">
+		<div>
+			<button id="biblereg-fragment" onclick="bibleReg.toggleFragment()">Könyvtördelés bekapcsolása</button>
+			<button id="biblereg-save"	 onclick="bibleReg.saveBook()">Sorrend mentése (teszt funkció)</button>
+		</div>
+		<ol></ol>
+	</div>
+	<div id="biblereg-editor-controls">
+		<select id="biblereg-editor-select"><option></option></select>
+		<button id="biblereg-editor-makeup"  onclick="bibleReg.makeup()" disabled="disabled">Szétválaszt</button>
+		<button id="biblereg-editor-closeup" onclick="bibleReg.closeup()" disabled="disabled">Összevon</button>
+	</div>
+</body>
+</html>
